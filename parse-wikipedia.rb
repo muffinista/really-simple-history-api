@@ -42,6 +42,7 @@ span.each { |x|
       tmp = line[1..-1].gsub(/\[\[([^\|\]]+)\|([^\]]+)\]\]/) { |link|
         $2
       }.
+        gsub(/''/, "'").
         gsub(/\]\]/, "").
         gsub(/\[\[/, "").
         gsub(/\&ndash;/, "-").
@@ -100,7 +101,8 @@ span.each { |x|
       #    tmp = line[1..-1].gsub(/\&ndash;/, "-").gsub(/ +/, ' ').lstrip.rstrip
       #puts tmp
 
-      output = {:text => tmp }
+      event_year, event_data = tmp.split(" - ")
+      output = {:year => event_year, :text => event_data }
       # skipping URL output for now
       #      output[:url] = url unless url.nil?
       data[cat] << output

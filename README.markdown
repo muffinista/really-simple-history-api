@@ -18,8 +18,9 @@ the [Today's History](http://history.muffinlabs.com/today) page.
 
 How To Use
 ----------
-* Get today's history in JSON format at [/date](http://history.muffinlabs.com/date)
+* Check out the code
+* Run parse-wikipedia.rb -- This downloads data from Wikipedia for each day of the year and parses it into the JSON output.
+* Get today's history in JSON format at [/date](http://history.muffinlabs.com/date).
 * Get another day's history in JSON at <strong>/date/month/day</strong> where month and day are numbers. For example, [/date/2/14](http://history.muffinlabs.com/date/2/14) to get the history for February 14th.
 * The data is split into births, deaths, and events.  Each element is a hash with one 'text' field.  I might add a URL or some other fields later.
-
 * Take a look at [the API javascript](http://history.muffinlabs.com/api.js) or the [history ticker](http://history.muffinlabs.com/today) to see the code in use.
