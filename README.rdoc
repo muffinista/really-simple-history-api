@@ -1,0 +1,24 @@
+= Really Simple History API
+
+== What is it?
+I wanted to write a 'this day in history' twitter bot, which posts events which 
+happened on this day.  There's a few people on Twitter doing this already, but I
+am lazy and wanted to automate it.
+
+Luckily, <a href="http://en.wikipedia.org/wiki/List_of_historical_anniversaries">Wikipedia</a>
+has entries for each day of the year.  I wrote a parser to turn this into JSON data, and a very
+simple Sinatra app to spit out that data for any given day.
+
+Just for kicks, I wrote a pretty simple JS interface as well.  You can see it in action on
+the <a href="http://history.muffinlabs.com/today">Today's History</a> page.
+
+
+== How To Use
+* Get today's history in JSON format at <a href="/date">/date</a>
+* Get another day's history in JSON at <strong>/date/month/day</strong> where month and day are numbers.
+   For example, <a href="/date/2/14">/date/2/14</a> to get the history for February 14th.
+* The data is split into births, deaths, and events.  Each element is a hash with 
+   one 'text' field.  I might add a URL or some other fields later.
+
+* Take a look at <a href="http://history.muffinlabs.com/api.js">the API javascript</a> or the
+* <a href="http://history.muffinlabs.com/today">history ticker</a> to see the code in use.
