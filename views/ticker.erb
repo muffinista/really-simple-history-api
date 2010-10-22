@@ -45,7 +45,7 @@ $(document).ready(function() {
       attr("href", historyData.url);
 
     var entryText = function(e) {
-      return e.text;
+      return e.year ": " + e.text;
     }
 
     $(d.Births).each(function(i, b) {
