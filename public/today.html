@@ -1,0 +1,95 @@
+  <style>
+	body {
+	  font-family:verdana;
+	}
+	#output {
+	  display:none;
+	}
+	#output h2 {
+	  float: left;
+	  width: 100px;
+	}
+	#output ul {
+	  float:left;
+	  padding: 10px 20px;
+	  background:#333;
+	  color:#fff;
+	  width:600px;
+	}
+	ul#births, ul#deaths {
+	  height: 20px;
+	}
+	ul#events {
+	  height: 60px;
+	}
+	
+	ul li {
+	  list-style:none;
+	  font-size:12px;
+	}
+	ul li a {
+	  font-color: white;
+	}
+	ul li a:hover {
+	  font-color: yellow;
+	}
+  </style>
+
+  <script type="text/javascript">
+	// random array sort from
+	// http://javascript.about.com/library/blsort2.htm
+	function randOrd() { return(Math.round(Math.random())-0.5); }
+
+	$(document).ready(function() {
+	  historyData.load(function(d) {
+
+	    // randomly sort our data just for variety
+	    d.Births.sort(randOrd);
+	    d.Events.sort(randOrd);
+	    d.Deaths.sort(randOrd);
+
+	    $("#today").html("Today in History: " + historyData.date);
+	    $("#learn-more").
+	      html(historyData.date + " on Wikipedia").
+	      attr("href", historyData.url);
+
+	    var entryText = function(e) {
+	      /*var x = e.text;
+           if ( typeof(e.url) != "undefined" ) {
+	        x = x + " (<a href='" + e.url + "'>link</a>)";
+          }
+        	return x;*/
+	      return e.text;
+	    }
+
+	    $(d.Births).each(function(i, b) {
+	      $("#births").append("<li>" + entryText(b) + "</li>");
+        });
+	    $(d.Deaths).each(function(i, d) {
+	      $("#deaths").append("<li>" + entryText(d) + "</li>");
+        });
+	    $(d.Events).each(function(i, e) {
+	      $("#events").append("<li>" + entryText(e) + "</li>");
+        });
+	    $("ul").list_ticker({ speed:8000, effect:'fade' });
+
+	    $("#output").fadeIn();
+	  });
+    });
+  </script>
+
+  <h1 id="today">Today in History</h1>
+  <div id="output">
+	<h2>Events</h2>	<ul id="events"></ul>
+	<div style="clear:both"></div>
+
+	<h2>Births</h2>	<ul id="births"></ul>
+	<div style="clear:both"></div>
+
+	<h2>Deaths</h2>	<ul id="deaths"></ul>
+	<div style="clear:both"></div>
+
+	<div>
+	  <a id="learn-more" href="">learn more on Wikipedia</a>
+	</div>
+  </div>
