@@ -3,24 +3,20 @@
 require "rubygems"
 require "bundler/setup"
 
-require 'rest_client'
-require 'media_wiki'
+require 'mediawiki_api'
 require 'json'
 
-mw = MediaWiki::Gateway.new('http://en.wikipedia.org/w/api.php')
-
-span = Date.new(2000, 1, 1)..Date.new(2000, 12, 31)
-span.each { |x| 
+def grab_date(x)
+  mw = MediawikiApi::Client.new('https://en.wikipedia.org/w/api.php')
 
   actual_date = x.strftime("%m-%d")
   wiki_date = x.strftime("%B %e").gsub(/ +/, ' ')
 
-  puts wiki_date
-
   cat = ""
   data = {}
 
-  wikitext = mw.get(wiki_date)
+  puts wiki_date
+  wikitext = mw.get_wikitext(wiki_date).body.force_encoding("UTF-8")
   File.open("data/#{actual_date}.wiki", 'w') {|f| f.write(wikitext) }
 
   cats_to_ignore = ["", "Holidays and observances", "External links", "References"]
@@ -118,4 +114,10 @@ span.each { |x|
     :data => data
   }
   File.open("data/#{actual_date}.json", 'w') {|f| f.write(results.to_json) }
-} # span.each
+
+end
+
+span = Date.new(2000, 1, 1)..Date.new(2000, 12, 31)
+span.each { |x|
+  grab_date(x)
+}

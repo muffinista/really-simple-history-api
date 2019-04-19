@@ -1,23 +1,33 @@
-GIT
-  remote: git://github.com/muffinista/mediawiki-gateway.git
-  revision: dd5c14551f75a4fe1ba8b0cb60ab19876b5a7d89
-  specs:
-    mediawiki-gateway (0.1.1)
-      rest-client
-
 GEM
-  remote: http://rubygems.org/
-  remote: http://gemcutter.org/
-  remote: http://gems.github.com/
+  remote: https://rubygems.org/
   specs:
-    json (1.4.6)
-    mime-types (1.16)
-    rest-client (1.6.1)
-      mime-types (>= 1.16)
+    domain_name (0.5.20180417)
+      unf (>= 0.0.5, < 1.0.0)
+    faraday (0.15.4)
+      multipart-post (>= 1.2, < 3)
+    faraday-cookie_jar (0.0.6)
+      faraday (>= 0.7.4)
+      http-cookie (~> 1.0.0)
+    faraday_middleware (0.13.1)
+      faraday (>= 0.7.4, < 1.0)
+    http-cookie (1.0.3)
+      domain_name (~> 0.5)
+    json (2.2.0)
+    mediawiki_api (0.7.1)
+      faraday (~> 0.9, >= 0.9.0)
+      faraday-cookie_jar (~> 0.0, >= 0.0.6)
+      faraday_middleware (~> 0.10, >= 0.10.0)
+    multipart-post (2.0.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.5)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   json
-  mediawiki-gateway!
+  mediawiki_api
+
+BUNDLED WITH
+   1.16.1
