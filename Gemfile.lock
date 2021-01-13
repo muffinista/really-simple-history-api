@@ -1,33 +1,32 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    domain_name (0.5.20180417)
-      unf (>= 0.0.5, < 1.0.0)
-    faraday (0.15.4)
-      multipart-post (>= 1.2, < 3)
-    faraday-cookie_jar (0.0.6)
-      faraday (>= 0.7.4)
-      http-cookie (~> 1.0.0)
-    faraday_middleware (0.13.1)
-      faraday (>= 0.7.4, < 1.0)
-    http-cookie (1.0.3)
-      domain_name (~> 0.5)
-    json (2.2.0)
-    mediawiki_api (0.7.1)
-      faraday (~> 0.9, >= 0.9.0)
-      faraday-cookie_jar (~> 0.0, >= 0.0.6)
-      faraday_middleware (~> 0.10, >= 0.10.0)
-    multipart-post (2.0.0)
-    unf (0.1.4)
-      unf_ext
-    unf_ext (0.0.7.5)
+    mini_portile2 (2.4.0)
+    mustermann (1.1.1)
+      ruby2_keywords (~> 0.0.1)
+    nio4r (2.5.4)
+    nokogiri (1.10.2)
+      mini_portile2 (~> 2.4.0)
+    puma (5.1.1)
+      nio4r (~> 2.0)
+    rack (2.2.3)
+    rack-protection (2.1.0)
+      rack
+    ruby2_keywords (0.0.2)
+    sinatra (2.1.0)
+      mustermann (~> 1.0)
+      rack (~> 2.2)
+      rack-protection (= 2.1.0)
+      tilt (~> 2.0)
+    tilt (2.0.10)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  json
-  mediawiki_api
+  nokogiri
+  puma
+  sinatra
 
 BUNDLED WITH
-   1.16.1
+   1.17.3

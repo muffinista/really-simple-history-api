@@ -1,6 +1,5 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
-gem "mediawiki_api"
-gem "json"
-
-
+gem 'nokogiri'
+gem 'sinatra'
+gem 'puma'

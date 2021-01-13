@@ -1,48 +1,77 @@
-/* List Ticker by Alex Fish 
-// www.alexefish.com
-//
-// options:
-//
-// effect: fade/slide
-// speed: milliseconds
-*/
+// random array sort from
+// http://javascript.about.com/library/blsort2.htm
+var randOrd = function() { return(Math.round(Math.random())-0.5); }
 
-(function($){
-  $.fn.list_ticker = function(options){
-    
-    var defaults = {
-      speed:4000,
-	  effect:'slide'
-    };
-    
-    var options = $.extend(defaults, options);
-    
-    return this.each(function(){
-      
-      var obj = $(this);
-      var list = obj.children();
-      list.not(':first').hide();
-      
-      setInterval(function(){
+var getLocation = function(href) {
+  var l = document.createElement("a");
+  l.href = href;
+  return l.protocol + "//" + l.host;
+};
+
+var shuffleList = function(ul) {
+  for (var i = ul.children.length; i >= 0; i--) {
+    ul.appendChild(ul.children[Math.random() * i | 0]);
+  }
+};
+
+var setupAnimation = function(el) {
+  el.classList.add("fade-in-and-out");
+  el.addEventListener('animationend', () => {
+    el.classList.remove("fade-in-and-out");
+    setTimeout(function() {
+      el.classList.add("fade-in-and-out");
+      shuffleList(el);
+    }, 100);
+  });
+};
+
+var setupTicker = function() {
+  var host = getLocation(document.getElementById("ticker").src);
+  
+  historyData.load({
+    host: host,
+    callback: function(d) {
+      // randomly sort our data just for variety
+      d.data.Births.sort(randOrd);
+      d.data.Events.sort(randOrd);
+      d.data.Deaths.sort(randOrd);
+       
         
-        list = obj.children();
-        list.not(':first').hide();
+      document.querySelector("#today").innerHTML = "Today in History: " + d.date;
+      document.querySelector("#learn-more").innerHTML = d.date + " on Wikipedia";
+      document.querySelector("#learn-more").href = d.url;
         
-        var first_li = list.eq(0)
-        var second_li = list.eq(1)
-		
-		if(options.effect == 'slide'){
-			first_li.slideUp();
-			second_li.slideDown(function(){
-				first_li.remove().appendTo(obj);
-			});
-		} else if(options.effect == 'fade'){
-			first_li.fadeOut(function(){
-				second_li.fadeIn();
-				first_li.remove().appendTo(obj);
-			});
-		}
-      }, options.speed)
-    });
-  };
-})(jQuery);
+      let births = document.querySelector("#births");
+      let deaths = document.querySelector("#deaths");
+      let events = document.querySelector("#events");
+
+      d.data.Births.forEach((b) => {
+        let li = document.createElement('li');
+        li.innerHTML = b.year + " - " + b.text;
+        births.appendChild(li);
+      });
+      d.data.Deaths.forEach(function(b) {
+        let li = document.createElement('li');
+        li.innerHTML = b.year + " - " + b.text;
+        deaths.appendChild(li);
+      });
+      d.data.Events.forEach(function(b) {
+        let li = document.createElement('li');
+        li.innerHTML = b.html;
+        events.appendChild(li);
+      });
+
+      setupAnimation(events);
+      setupAnimation(deaths);
+      setupAnimation(births);
+    }
+  });
+};
+
+document.onreadystatechange = function() {
+  if (document.readyState === 'complete') {
+    setupTicker();
+  }
+};
+
+

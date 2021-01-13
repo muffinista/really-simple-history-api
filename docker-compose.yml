@@ -1,0 +1,9 @@
+version: "3.5"
+services:
+  web:
+    build:
+      context: .
+    volumes:
+      - .:/app
+    ports:
+      - 8080:3000

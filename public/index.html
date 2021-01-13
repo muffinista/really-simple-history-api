@@ -1,0 +1,231 @@
+<html>
+  <head>
+    <title>Today in History</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
+    <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
+    <style>
+     body {
+       display: grid;
+       font-size: 15px;
+       grid-gap: 1em;
+       font-family: Helvetica, Arial, sans-serif;
+       margin: 0 auto;
+     }
+
+     ul {
+       list-style: none;
+       padding-left: 0px;
+     }
+
+     body > header, body > footer {
+       display: flex;
+       background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAALklEQVQoU2NkIAIwEqGGgZAiYwYGhrOEFIEtIlsR2Apkt5JtEoaHYSZhWIGsEgB+QQMKUesOpwAAAABJRU5ErkJggg==) repeat;
+     }
+     header > hgroup > h1 {
+       font-size: 1.2em;
+     }
+     header > hgroup {
+       padding-left: 1.0em;
+     }
+     header > nav > ul {
+       font-size: 0.9em;
+       margin-left: 0.5em;
+       display: flex;
+     }
+     header > nav > ul > li {
+       margin-right: 0.5em;
+     }
+
+     body > main, body > footer {
+       padding-left: 1.0em;
+     }
+     main {
+       max-width: 50em;
+     }
+
+     main h1 {
+       font-size: 1.2em;
+     }
+     main h2 {
+       font-size: 1.1em;
+     }
+
+     section {
+       margin-bottom: 2.0em;
+     }
+     
+     #ticker {
+       font-size: 0.9em;
+     }
+     ul.ticker > li:nth-child(n+2) {
+       display: none;
+     }
+
+     code {
+       display: block;
+       font-family: monospace;
+       white-space: pre;
+       font-size: 0.9em;
+       border-left: 1px dashed;
+       padding: 1.0em;
+       margin-top: 1.7em;
+       margin-bottom: 1.7em;       
+     }
+
+     .ticker {
+       opacity: 0;
+       min-height: 3.0em;
+     }
+     .fade-in-and-out {
+       animation: fade 10s linear;
+       opacity: 1;
+     }
+     @keyframes fade {
+       0%, 100% { opacity: 0; }
+       5%, 95% { opacity:1; }
+     }
+    </style>
+  </head>
+  <body>
+    <header>
+      <hgroup>
+		    <h1 class="brand-title">Today in History</h1>
+      </hgroup>
+      <nav>
+        <ul>
+          <li><a href="#ticker">Events</a></li>
+          <li><a href="#api">API</a></li>
+          <li><a href="#data">Data</a></li>
+          <li><a href="#license">License</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section class="history">
+        <a name="events"><h1 id="today">Today in History</h1></a>
+        <div>
+          <a id="learn-more" href="">learn more on Wikipedia</a>
+        </div>          
+        
+        <div id="ticker">
+          <h2>Events</h2>
+          <div>
+            <ul id="events" class="ticker"></ul>
+          </div>
+          <div>
+            <h2>Births</h2>
+            <ul id="births" class="ticker"></ul>
+          </div>
+          <div>
+            <h2>Deaths</h2>
+            <ul id="deaths" class="ticker"></ul>
+          </div>             
+        </div>
+      </section>
+      <section>
+        <h1>What is this?</h1>
+        <p>I've worked on a few projects where I wanted to have some
+          basic historical information for any given day. There's a
+          bunch of databases of historical events out there, but most
+          of them are closed, commerical, or they suck.</p>
+        
+        <p>Luckily, <a href="http://en.wikipedia.org/wiki/List_of_historical_anniversaries">Wikipedia</a>
+          has entries for each day of the year. I wrote a parser to
+          turn this into JSON data, and a very simple app to
+          spit out that data for any given day.</p>
+        
+        <p>Just for kicks, I wrote a pretty simple JS interface as
+          well. It's generating the tickers at the top of this page</p>
+      </section>
+      
+      <section>
+        <a name="api"><h1>API</h1></a>
+        <p>Here's a simple API you can use to find out what happened today:</p>
+        <p>Get today's history in JSON format at <a href="/date">/date</a></p>
+        <code>
+curl http://history.muffinlabs.com/date
+        </code>
+        <p>Get another day's history in JSON at <strong>/date/month/day</strong> where month and day are numbers.
+          For example, visit <a href="/date/2/14">history.muffinlabs.com/date/2/14</a> to get the history for February 14th.
+        </p>
+        
+        <code>
+curl http://history.muffinlabs.com/date/2/14
+        </code>
+
+        <code>
+{
+  "date": "February 14",
+  "url": "http://wikipedia.org/wiki/February_14",
+   "data":{
+    "Events":[ // data here // ],
+    "Births":[ // data here // ],
+    "Deaths":[ // data here // ]
+  }
+}
+        </code>
+        
+        <p>The data is split into births, deaths, and events. Each
+          element is a hash that looks a little like this:</p>
+        <code>
+      {
+        "year": "42 BC",
+        "text": "The Roman Senate posthumously deifies Julius Caesar",
+        "html": "// some html that describes the event, with links to wikipedia //",
+        "no_year_html": "// html but not prepended with the year //",
+        "links": [
+          {
+            "title": "Roman Senate",
+            "link": "http://wikipedia.com/wiki/Roman_Senate"
+          },
+          {
+            "title": "Apotheosis",
+            "link": "http://wikipedia.com/wiki/Apotheosis"
+          },
+          {
+            "title": "Julius Caesar",
+            "link": "http://wikipedia.com/wiki/Julius_Caesar"
+          }
+        ]
+      }
+        </code>
+        
+        <p>Depending on your needs, you can either use the
+          pre-rendered HTML, or some sort of combination of the text and
+          subject links.</p>
+        
+        <p>There's also a very simple <a href="/api.js">Javascript
+          API</a> which you can use to put history data on a website.</p>
+      </section>
+
+      <section>
+        <a name="data"><h1>Getting the Data</h1></a>
+        <p>If you would like your own copy of the data, you can
+          generate it using the <a href="https://github.com/muffinista/really-simple-history-api">code</a>
+          here.</p>
+      </section>
+
+      <section>
+        <a name="license"><h1>License</h1></a>
+        <p>This website and data are licensed
+          using <a href="https://creativecommons.org/licenses/by-sa/3.0/us/">CC
+          BY-SA 3.0</a>, the same license used for Wikipedia data. You
+          are free to share and adapt the data, but it must be
+          attributed and any alterations must be shared under a
+          compatible license.</p>
+      </section>
+    </main>
+    <footer>
+      <ul>
+        <li><a href="https://muffinlabs.com">muffinlabs</a></li>
+      </ul>
+    </footer>
+  </body>
+
+  <script type="text/javascript" src="/api.js"></script>
+  <script type="text/javascript" id="ticker" src="/ticker.js"></script>
+</html>
+
+
