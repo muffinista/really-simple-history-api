@@ -11,8 +11,10 @@ require 'nokogiri'
 DIVIDERS = ['–', '-', '–'].uniq
 SECTIONS = ["Events", "Births", "Deaths"]
 
-if !File.directory?('data')
-	Dir.mkdir 'data'
+DEST = ENV['DEST'] || 'data'
+
+if !File.directory?(DEST)
+	Dir.mkdir DEST
 end
 
 def closest_header(el)
@@ -120,7 +122,7 @@ span.each { |x|
   wikitext = open(url) do |f|
     f.read
   end
-  File.open("data/#{actual_date}.html", 'w') {|f| f.write(wikitext) }
+  #File.open("#{DEST}/data/#{actual_date}.html", 'w') {|f| f.write(wikitext) }
 
 
   # switch to regular dashes
@@ -146,5 +148,5 @@ span.each { |x|
     :data => data
   }
 
-  File.open("data/#{actual_date}.json", 'w') {|f| f.write(JSON.pretty_generate(results)) }
+  File.open("#{DEST}/#{actual_date}.json", 'w') {|f| f.write(JSON.pretty_generate(results)) }
 } # span.each
