@@ -66,7 +66,7 @@
      code {
        display: block;
        font-family: monospace;
-       white-space: pre;
+       white-space: pre-wrap;
        font-size: 0.9em;
        border-left: 1px dashed;
        padding: 1.0em;
@@ -143,12 +143,12 @@
       <section>
         <a name="api"><h1>API</h1></a>
         <p>Here's a simple API you can use to find out what happened today:</p>
-        <p>Get today's history in JSON format at <a href="/date">/date</a></p>
+        <p><b>Get today's history</b> in JSON format at <a href="/date">/date</a></p>
         <code>
 curl http://history.muffinlabs.com/date
         </code>
-        <p>Get another day's history in JSON at <strong>/date/month/day</strong> where month and day are numbers.
-          For example, visit <a href="/date/2/14">history.muffinlabs.com/date/2/14</a> to get the history for February 14th.
+        <p><b>Get another day's history</b> in JSON at <a href="/date/1/1">/date/month/day</a> where month and day are numbers.
+          For example, visit <a href="/date/2/14">/date/2/14</a> to get the history for February 14th.
         </p>
         
         <code>
@@ -170,26 +170,26 @@ curl http://history.muffinlabs.com/date/2/14
         <p>The data is split into births, deaths, and events. Each
           element is a hash that looks a little like this:</p>
         <code>
-      {
-        "year": "42 BC",
-        "text": "The Roman Senate posthumously deifies Julius Caesar",
-        "html": "// some html that describes the event, with links to wikipedia //",
-        "no_year_html": "// html but not prepended with the year //",
-        "links": [
-          {
-            "title": "Roman Senate",
-            "link": "http://wikipedia.com/wiki/Roman_Senate"
-          },
-          {
-            "title": "Apotheosis",
-            "link": "http://wikipedia.com/wiki/Apotheosis"
-          },
-          {
-            "title": "Julius Caesar",
-            "link": "http://wikipedia.com/wiki/Julius_Caesar"
-          }
-        ]
-      }
+{
+  "year": "42 BC",
+  "text": "The Roman Senate posthumously deifies Julius Caesar",
+  "html": "// some html that describes the event, with links to wikipedia //",
+  "no_year_html": "// html but not prepended with the year //",
+  "links": [
+    {
+      "title": "Roman Senate",
+      "link": "http://wikipedia.com/wiki/Roman_Senate"
+    },
+    {
+      "title": "Apotheosis",
+      "link": "http://wikipedia.com/wiki/Apotheosis"
+    },
+    {
+      "title": "Julius Caesar",
+      "link": "http://wikipedia.com/wiki/Julius_Caesar"
+    }
+  ]
+}
         </code>
         
         <p>Depending on your needs, you can either use the
