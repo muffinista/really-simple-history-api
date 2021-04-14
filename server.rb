@@ -2,6 +2,15 @@
 require 'sinatra'
 require 'date'
 
+before { response.headers['Access-Control-Allow-Origin'] = '*' }
+
+options "*" do
+  response.headers["Allow"] = "HEAD,GET,PUT,POST,DELETE,OPTIONS"
+  response.headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Cache-Control, Accept"
+ 
+  200
+end
+
 get('/') { send_file File.expand_path('index.html', settings.public_folder)  }
 
 get('/date') {
