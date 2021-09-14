@@ -1,20 +1,20 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    mini_portile2 (2.5.1)
+    mini_portile2 (2.6.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
-    nio4r (2.5.7)
-    nokogiri (1.11.4)
-      mini_portile2 (~> 2.5.0)
+    nio4r (2.5.8)
+    nokogiri (1.12.3)
+      mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
-    puma (5.3.1)
+    puma (5.4.0)
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
     rack-protection (2.1.0)
       rack
-    ruby2_keywords (0.0.2)
+    ruby2_keywords (0.0.5)
     sinatra (2.1.0)
       mustermann (~> 1.0)
       rack (~> 2.2)
@@ -31,4 +31,4 @@ DEPENDENCIES
   sinatra
 
 BUNDLED WITH
-   1.17.3
+   2.1.4

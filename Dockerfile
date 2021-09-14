@@ -1,4 +1,4 @@
-FROM ruby:2.6.6
+FROM ruby:2.7
 
 ARG BUNDLER_VERSION=2.1.4
 
