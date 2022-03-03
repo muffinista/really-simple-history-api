@@ -29,6 +29,12 @@ def closest_header(el)
   prev = prev.previous_element
   return prev if prev.nil? || prev.name == 'h2'
 
+  prev = prev.previous_element
+  return prev if prev.nil? || prev.name == 'h2'
+
+  prev = prev.previous_element
+  return prev if prev.nil? || prev.name == 'h2'
+
   return nil
 end
 
@@ -117,18 +123,28 @@ span.each { |x|
   data = {
   }
 
-  url = "https://en.wikipedia.org/wiki/#{x.strftime('%B')}_#{x.strftime('%e').strip}"
-  puts url
-  wikitext = open(url) do |f|
-    f.read
-  end
-  #File.open("#{DEST}/data/#{actual_date}.html", 'w') {|f| f.write(wikitext) }
+  cached_file = "#{DEST}/#{actual_date}.html"
 
+  if File.exist?(cached_file)
+    wikitext = File.read(cached_file)
+  else
+    url = "https://en.wikipedia.org/wiki/#{x.strftime('%B')}_#{x.strftime('%e').strip}"
+    puts url
+    wikitext = open(url) do |f|
+      f.read
+    end
+
+    #File.write(cached_file, wikitext)
+  end
 
   # switch to regular dashes
   wikitext.gsub!(/–/, "-")
   
   doc = Nokogiri::HTML(wikitext)
+
+  # clean out some junky h3 elements
+  doc.css('ul + h3').each(&:remove)
+
   lists = doc.css('ul').each do |ul|
     header = closest_header(ul)
     next if header.nil?
