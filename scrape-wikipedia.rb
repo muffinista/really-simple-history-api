@@ -130,11 +130,11 @@ span.each { |x|
   else
     url = "https://en.wikipedia.org/wiki/#{x.strftime('%B')}_#{x.strftime('%e').strip}"
     puts url
-    wikitext = open(url) do |f|
+    wikitext = URI.open(url) do |f|
       f.read
     end
 
-    #File.write(cached_file, wikitext)
+    File.write(cached_file, wikitext) if ENV["CACHE_HTML"].to_i == 1
   end
 
   # switch to regular dashes
@@ -144,7 +144,8 @@ span.each { |x|
 
   # clean out some junky h3 elements
   doc.css('ul + h3').each(&:remove)
-
+  doc.css('div.thumb').each(&:remove)
+  
   lists = doc.css('ul').each do |ul|
     header = closest_header(ul)
     next if header.nil?
