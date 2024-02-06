@@ -1,6 +1,7 @@
-FROM ruby:2.7
+FROM ruby:3.1.2
+MAINTAINER Colin Mitchell <colin@muffinlabs.com>
 
-ARG BUNDLER_VERSION=2.1.4
+ARG BUNDLER_VERSION=2.5.6
 
 RUN apt-get update \
     && apt-get clean \
