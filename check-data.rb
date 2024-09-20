@@ -14,12 +14,14 @@ MIN_YEAR = 40
 MIN_EVENTS = 20
 MIN_TOTAL_EVENTS = 17900
 
+DEST = ENV['DEST'] || 'data'
+
 total = 0
 
 span = Date.new(2000, 1, 1)..Date.new(2000, 12, 31)
 span.each { |x| 
   actual_date = x.strftime("%m-%d")
-  source = "data/#{actual_date}.json"
+  source = "#{DEST}/#{actual_date}.json"
   
   data = JSON.parse(File.read(source))
   puts actual_date
