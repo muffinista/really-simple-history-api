@@ -2,6 +2,8 @@
 require 'sinatra'
 require 'date'
 
+set :host_authorization, { permitted_hosts: [] }
+
 before { response.headers['Access-Control-Allow-Origin'] = '*' }
 
 options "*" do
