@@ -23,6 +23,8 @@ if !File.directory?(DEST)
   Dir.mkdir DEST
 end
 
+USER_AGENT = ENV.fetch('USER_AGENT', "TodayInHistory/0.0 https://muffinlabs.com/ Ruby/#{RUBY_VERSION}")
+SLEEP_RATE = ENV.fetch('SLEEP_RATE', 5).to_i
 
 #
 # <div class="mw-heading mw-heading2">
@@ -147,9 +149,11 @@ span.each { |x|
   if File.exist?(cached_file)
     wikitext = File.read(cached_file)
   else
+    puts "Sleeping a bit to be kind and avoid rate limiting"
+    sleep SLEEP_RATE
     url = "https://en.wikipedia.org/wiki/#{x.strftime('%B')}_#{x.strftime('%e').strip}"
     puts url
-    wikitext = URI.open(url) do |f|
+    wikitext = URI.open(url, "User-Agent" => USER_AGENT) do |f|
       f.read
     end
 

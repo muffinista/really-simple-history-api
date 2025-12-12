@@ -1,4 +1,4 @@
-FROM ruby:3.1.2
+FROM ruby:3.4
 MAINTAINER Colin Mitchell <colin@muffinlabs.com>
 
 ARG BUNDLER_VERSION=2.5.6
