@@ -8,8 +8,8 @@ require 'json'
 require 'open-uri'
 require 'nokogiri'
 
-DIVIDERS = ['–', '-', '–'].uniq
-SECTIONS = ["Events", "Births", "Deaths"]
+DIVIDERS = ['-', '–', '-', '–'].uniq
+SECTIONS = ["Events", "Births", "Deaths", "Holidays and observances", "External links", "References"]
 
 DEST = ENV['DEST'] || 'data'
 
@@ -45,17 +45,20 @@ def process_list(list)
   data = []
 
   list.css("li").each do |item|
+    if item.css('ul')
+      inner_list = item.css('ul')
+      data << process_list(inner_list)
+      inner_list.remove
+    end
+
     # get the flat text of the entry
     text = item.text
-    #puts text
-    
     # 153 BC – Roman consuls begin their year in office.
     
     # figure out the year of the event
     year, result = text.split(/ [#{DIVIDERS.join('|')}] /, 2)
 
     result = result&.gsub(/\[\d+\]/, '')
-    #puts result
 
     #puts item.inspect
     
@@ -71,7 +74,9 @@ def process_list(list)
     }
     
     item.css("a").each { |link|
-      link["href"] = "https://wikipedia.org#{link['href']}"
+      link.delete('rel')
+      link.delete('id')
+      #link["href"] = "https://wikipedia.org#{link['href']}"
     }
     
     links = item.css("a").collect { |link|
@@ -93,17 +98,25 @@ def process_list(list)
       year = year.gsub(/AD /, '').gsub(/BC /, '')
     end
     
-    #puts "**** #{text} || !!#{year}!! --- #{result}"
+    # puts "**** #{text} || !!#{year}!! --- #{result}"
     raise StandardError.new(text) if result == ''
     
     year = year.strip
-    html = item.inner_html
+    #puts "*** #{year} //// #{item.inner_html}"
+    html = if year.to_i == 0
+             item.inner_html
              .squeeze(' ')
-             .gsub(/^#{year.to_i}[ ]?[#{DIVIDERS.join('|')}] /, "")
              .gsub(/^ – /, "")
              .gsub(/^ - /, "")
 
-    
+           else
+             item.inner_html
+             .squeeze(' ')
+             .gsub(/^#{year}\s+[#{DIVIDERS.join('|')}] /, "")
+             .gsub(/^ – /, "")
+             .gsub(/^ - /, "")
+           end
+
     data << {
       'year' => year,
       'text' => result,
@@ -113,7 +126,7 @@ def process_list(list)
     }
   end
 
-  data
+  data.flatten
 end
 
 
@@ -161,27 +174,46 @@ span.each { |x|
   end
 
   # switch to regular dashes
-  wikitext = wikitext.gsub(/–/, "-").gsub('&#8211;', '-')
+  wikitext = wikitext
+               .gsub(/–/, "-").gsub('&#8211;', '-')
+  
   
   doc = Nokogiri::HTML(wikitext)
 
+  doc.css('span[typeof="mw:Entity"]').each do |sp|
+    next unless sp.text == '-'
+    sp.replace('-')
+  end
+  
   # clean out some junky h3 elements
   doc.css('ul + h3').each(&:remove)
   doc.css('div.thumb').each(&:remove)
   doc.css('.mw-editsection').each(&:remove)
+
   
-  lists = doc.css('ul').each do |ul|
-    header = closest_header(ul)
-    next if header.nil?
+  sections = doc.css('#mw-content-text > div > section[aria-labelledby]').each do |s|
+    header = s.css("> .mw-heading h2")
+    section = header.text
 
-    # grab the section title from a span with this class
-    section = header.text    
-
-    next unless SECTIONS.include?(section)
-
-    data[section] ||= []
-    data[section] = [data[section], process_list(ul)].flatten
+    lists = s.css('ul').each do |ul|
+      data[section] ||= []
+      data[section] = [data[section], process_list(ul)].flatten
+    end
   end
+
+  # lists = doc.css('ul').each do |ul|
+  #   header = closest_header(ul)
+  #   puts header
+  #   next if header.nil?
+
+  #   # grab the section title from a span with this class
+  #   section = header.text    
+
+  #   next unless SECTIONS.include?(section)
+
+  #   data[section] ||= []
+  #   data[section] = [data[section], process_list(ul)].flatten
+  # end
 
   results = {
     'date' => wiki_date,
